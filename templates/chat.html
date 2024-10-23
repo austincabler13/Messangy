@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Messaging App</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Container -->
+    <div class="min-h-screen flex items-center justify-center bg-gray-50">
+
+        <!-- Messaging UI Card -->
+        <div class="w-full max-w-lg bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-2xl font-bold mb-4 text-center text-gray-800">Chat with Us!</h1>
+
+            <!-- Chat Window -->
+            <div id="chat-window" class="h-64 overflow-y-auto mb-4 bg-gray-100 p-4 rounded-lg shadow-inner">
+                <!-- Messages will appear here dynamically -->
+            </div>
+
+            <!-- Input Form -->
+            <form id="chat-form" class="flex items-center">
+                <select id="emoji-picker" class="mr-2 border rounded p-2">
+                    <option value="">😀</option>
+                    <option value="😊">😊</option>
+                    <option value="😢">😢</option>
+                    <option value="😡">😡</option>
+                    <option value="👍">👍</option>
+                    <option value="❤️">❤️</option>
+                    <option value="🎉">🎉</option>
+                    <option value="😂">😂</option>
+                    <option value="😎">😎</option>
+                </select>
+                <input id="message-input" 
+                       type="text" 
+                       placeholder="Type a message..." 
+                       class="w-full px-4 py-2 mr-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                       autocomplete="off">
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+        const chatWindow = document.getElementById('chat-window');
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message-input');
+        const emojiPicker = document.getElementById('emoji-picker');
+
+        // Append new message to chat window
+        function appendMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('p-2', 'mb-2', 'bg-gray-200', 'rounded', 'shadow-sm');
+            messageElement.innerText = message;
+            chatWindow.appendChild(messageElement);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        // Listen for 'message' event from server
+        socket.on('message', function(message) {
+            appendMessage(message);
+        });
+
+        // Send message to server on form submission
+        chatForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const message = messageInput.value + ' ' + emojiPicker.value; // Append selected emoji
+            if (message.trim()) {
+                socket.emit('message', message);
+                messageInput.value = '';
+                emojiPicker.selectedIndex = 0; // Reset emoji picker
+            }
+        });
+    </script>
+</body>
+</html>

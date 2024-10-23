@@ -1,0 +1,7 @@
+{
+    "imports": {
+      "socket.io-client": "https://cdn.socket.io/4.0.1/socket.io.esm.min.js",
+      "emoji-button": "https://cdn.skypack.dev/emoji-button"
+    }
+  }
+  
