@@ -16,7 +16,7 @@ This is a real-time messaging app built using Flask, Socket.IO, PostgreSQL, and 
 1. Clone this repository:
 
     ```bash
-    git clone https://github.com/your-repo/messaging-app.git
+    git clone [https://github.com/your-repo/messaging-app.git](https://github.com/austincabler13/Messangy.git)
     cd messaging-app
     ```
 
